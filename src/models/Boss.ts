@@ -1,14 +1,22 @@
-import { Model, Table, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Model, Table, Column, ForeignKey, BelongsTo, DataType, AllowNull } from 'sequelize-typescript';
+import { Field, ObjectType } from 'type-graphql';
 import sequelize from '../sequelize';
 import { User } from './User';
 
-@Table({ tableName: 'boss' })
+@ObjectType()
+@Table
 export class Boss extends Model<Boss> {
-  @Column({ primaryKey: true, autoIncrement: true })
+  @Field()
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
   id!: number;
 
+  @AllowNull(false)
   @ForeignKey(() => User)
-  @Column
+  @Column(DataType.NUMBER)
   userId!: number;
 
   @BelongsTo(() => User)
