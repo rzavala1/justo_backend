@@ -27,7 +27,7 @@ async function main() {
       const token = req.headers.authorization || "";
       const isPublicOperation =
         req.body.operationName === "loginUser" ||
-        req.body.operationName === "registerUser";
+        req.body.operationName === "createUser";
 
       if (isPublicOperation) {
         return { req };

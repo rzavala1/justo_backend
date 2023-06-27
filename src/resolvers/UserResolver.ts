@@ -23,6 +23,12 @@ export class UserResolver {
   async createUser(
     @Arg("userData", () => CreateUserInput) userData: CreateUserInput
   ): Promise<User> {
+    //verficar que no se este utilizado el correo
+    const existingUser = await User.findOne({ where: { email: userData.email } });
+    if (existingUser) {
+      throw new Error("El correo electrónico ya está registrado");
+    }
+    
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
     userData.password=hashedPassword;
