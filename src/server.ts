@@ -8,16 +8,37 @@ import { AuthResolver } from "./resolvers/AuthResolver";
 import { ManagerResolver } from "./resolvers/ManagerResolver";
 import { HitsResolver } from "./resolvers/HitsResolver";
 import { HitmanResolver } from "./resolvers/HitmanResolver";
+import { verifyToken } from "./controllers/AuthController";
 
 async function main() {
-  
   const app = express();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver,AuthResolver, ManagerResolver, HitsResolver,HitmanResolver],
+      resolvers: [
+        UserResolver,
+        AuthResolver,
+        ManagerResolver,
+        HitsResolver,
+        HitmanResolver,
+      ],
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => {
+      const token = req.headers.authorization || "";
+      const isPublicOperation =
+        req.body.operationName === "loginUser" ||
+        req.body.operationName === "registerUser";
+
+      if (isPublicOperation) {
+        return { req };
+      }
+
+      const user = verifyToken(token);
+      if (!user) {
+        throw new Error("Invalid Token");
+      }
+      return { req, res, user };
+    },
   });
 
   await apolloServer.start();
