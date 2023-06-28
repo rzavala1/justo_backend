@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { CreateHitInput } from "../dto/CreateHitInput";
 import { UpdateHitInput } from "../dto/UpdateHitInput";
+import Hierarchy from "../models/Hierarchy";
 import { Hit } from "../models/Hit";
 import { User } from "../models/User";
 
@@ -32,33 +33,33 @@ export class HitsResolver {
         });
         return allHits;
 
-      /*case 3:
-        const hitsForHitman = await Hit.findAll({
-          where: { hitmanId: userSave!.id },
+      case 2: //manager
+        const hierarchy = await Hierarchy.findAll({
+          where: {
+            parentId: userSave?.id,
+          },
         });
-        return hitsForHitman;s
 
-      case 2:
-        const hitsForManager = await Hit.findAll({
-          include: {
-            model: Manager,
-            where: {
-              [Op.or]: [
-                { id: userSave!.id }, // Hits asignados al Manager
-                { hitmanId: userSave!.id }, // Hits asignados a los lacayos del Manager (si aplica)
-              ],
+        const hitmanIds = hierarchy.map((item) => item.childId);
+
+        const hits = await Hit.findAll({
+          include: [User],
+          where: {
+            assignId: {
+              [Op.in]: hitmanIds,
             },
           },
         });
-        return hitsForManager;
+        return hits;
 
-      case 1:
-        // Obtener todos los hits
-        const allHits = await Hit.findAll();
-        return allHits;*/
+      case 3:
+        const hitsForHitman = await Hit.findAll({
+          include: [User],
+          where: { assignId: userSave!.id },
+        });
+        return hitsForHitman;
 
       default:
-        // Si el rol no coincide con ninguno de los casos anteriores, retornar un array vacío o lanzar un error según tu requerimiento
         return [];
     }
   }
@@ -69,7 +70,7 @@ export class HitsResolver {
     return hit;
   }
 
- /* @Mutation(() => Hit)
+  /* @Mutation(() => Hit)
   async createHit(@Arg("data") data: CreateHitInput): Promise<Hit> {
     const hit = await Hit.create(data as Hit);
     return hit;

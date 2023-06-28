@@ -4,7 +4,7 @@ import sequelize from '../sequelize';
 import { User } from './User';
 
 @ObjectType()
-@Table
+@Table({ tableName: 'hierarchy' }) 
 export class Hierarchy extends Model<Hierarchy>{
   @Field()
   @Column({
@@ -26,9 +26,13 @@ export class Hierarchy extends Model<Hierarchy>{
   @Column(DataType.NUMBER)
   childId!: number;
 
-  @Field() 
-  @BelongsTo(() => User)
-  User!: User;
+  @Field(() => User)
+  @BelongsTo(() => User, 'parentId')
+  manager!: User;
+
+  @Field(() => User)
+  @BelongsTo(() => User, 'childId')
+  hitman!: User;
   
 }
 
