@@ -15,19 +15,23 @@ export class Hitman extends Model<Hitman> {
   })
   id!: number;
 
+  @Field()
   @AllowNull(false)
   @ForeignKey(() => User)
   @Column(DataType.NUMBER)
   userId!: number;
 
+  @Field()
   @BelongsTo(() => User)
   user!: User;
 
+  @Field()
   @AllowNull(false)
   @ForeignKey(() => Manager)
   @Column(DataType.NUMBER)
   managerId!: number;
 
+  @Field()
   @BelongsTo(() => Manager)
   manager!: Manager;
 }

@@ -25,7 +25,7 @@ async function main() {
     }),
     context: ({ req, res }) => {
       const token = req.headers.authorization || "";
-      if (token!=="") {
+      if (token!=="" && token!=="__public") {
         const user = verifyToken(token);
         if (!user) {
           throw new Error("Invalid Token");

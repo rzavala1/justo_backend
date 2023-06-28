@@ -14,10 +14,12 @@ export class User extends Model<User> {
   })
   id!: number;
   
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
   name!: string;
 
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
   email!: string;
@@ -34,6 +36,7 @@ export class User extends Model<User> {
   @Column(DataType.DATE)
   updatedAt!: Date;
 
+  @Field()
   @AllowNull(false)
   @ForeignKey(() => Role)
   @Column(DataType.NUMBER)
