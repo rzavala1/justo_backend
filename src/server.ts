@@ -25,19 +25,22 @@ async function main() {
     }),
     context: ({ req, res }) => {
       const token = req.headers.authorization || "";
-      const isPublicOperation =
-        req.body.operationName === "loginUser" ||
-        req.body.operationName === "createUser";
+      if (token!=="") {
+        const user = verifyToken(token);
+        if (!user) {
+          throw new Error("Invalid Token");
+        }
+        return { req, res, user };
+      } else {
+        const isPublicOperation =
+          req.body.operationName === "loginUser" ||
+          req.body.operationName === "createUser";
 
-      if (isPublicOperation) {
-        return { req };
+        if (isPublicOperation) {
+          return { req , res};
+        }
+        throw new Error("Invalid");
       }
-
-      const user = verifyToken(token);
-      if (!user) {
-        throw new Error("Invalid Token");
-      }
-      return { req, res, user };
     },
   });
 
