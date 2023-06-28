@@ -3,28 +3,35 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('hitmans', {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      userId: {
-        type: DataTypes.INTEGER,
+      name: {
+        type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
-      managerId: {
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        default:true,
+        allowNull: false,
+      },
+      roleId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'manager',
+          model: 'roles',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -42,6 +49,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('hitmans');
+    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('roles');
   },
 };

@@ -5,9 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 import { AuthResolver } from "./resolvers/AuthResolver";
-import { ManagerResolver } from "./resolvers/ManagerResolver";
 import { HitsResolver } from "./resolvers/HitsResolver";
-import { HitmanResolver } from "./resolvers/HitmanResolver";
 import { verifyToken } from "./controllers/AuthController";
 
 async function main() {
@@ -18,9 +16,7 @@ async function main() {
       resolvers: [
         UserResolver,
         AuthResolver,
-        ManagerResolver,
         HitsResolver,
-        HitmanResolver,
       ],
     }),
     context: ({ req, res }) => {

@@ -11,10 +11,10 @@ import {
 } from "sequelize-typescript";
 import { Field, ObjectType } from "type-graphql";
 import sequelize from "../sequelize";
-import { Hitman } from "./Hitman";
+import { User } from "./User";
 
 @ObjectType()
-@Table
+@Table({ tableName: 'hits' }) 
 export class Hit extends Model<Hit> {
   @Field()
   @Column({
@@ -27,7 +27,12 @@ export class Hit extends Model<Hit> {
   @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
-  target!: string;
+  description!: string;
+
+  @Field()
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  name!: string;
 
   @Field()
   @AllowNull(false)
@@ -49,13 +54,20 @@ export class Hit extends Model<Hit> {
 
   @Field()
   @AllowNull(false)
-  @ForeignKey(() => Hitman)
+  @ForeignKey(() => User)
   @Column(DataType.NUMBER)
-  hitmanId!: number;
+  assignId!: number;
 
   @Field() 
-  @BelongsTo(() => Hitman)
-  hitman!: Hitman;
+  @BelongsTo(() => User)
+  User!: User;
+
+  @Field()
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  createId!: number;
+
 }
 
 sequelize.addModels([Hit]);

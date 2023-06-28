@@ -3,8 +3,6 @@ import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { CreateHitInput } from "../dto/CreateHitInput";
 import { UpdateHitInput } from "../dto/UpdateHitInput";
 import { Hit } from "../models/Hit";
-import { Hitman } from "../models/Hitman";
-import { Manager } from "../models/Manager";
 import { User } from "../models/User";
 
 export interface MyContext {
@@ -30,14 +28,9 @@ export class HitsResolver {
     switch (userSave?.roleId) {
       case 1: //boss
         const allHits = await Hit.findAll({
-          include: [{ model: Hitman, include: [User] }],
+          include: [User],
         });
         return allHits;
-      case 3:
-        const hitsForHitman = await Hit.findAll({
-          where: { hitmanId: userSave!.id },
-        });
-        return hitsForHitman;
 
       /*case 3:
         const hitsForHitman = await Hit.findAll({
@@ -76,11 +69,11 @@ export class HitsResolver {
     return hit;
   }
 
-  @Mutation(() => Hit)
+ /* @Mutation(() => Hit)
   async createHit(@Arg("data") data: CreateHitInput): Promise<Hit> {
     const hit = await Hit.create(data as Hit);
     return hit;
-  }
+  }*/
 
   @Mutation(() => Hit)
   async updateHit(

@@ -4,7 +4,7 @@ import sequelize from '../sequelize';
 import { Role } from './Role';
 
 @ObjectType()
-@Table
+@Table({ tableName: 'users' }) 
 export class User extends Model<User> {
   @Field()
   @Column({
@@ -44,6 +44,14 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Role)
   role!: Role;
+
+  @Field()
+  @AllowNull(false)
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: true,
+  })
+  active!: boolean;
 
 }
 sequelize.addModels([User]);

@@ -1,12 +1,11 @@
-import { Model, Table, Column, ForeignKey, BelongsTo, DataType, AllowNull } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, AllowNull, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Field, ObjectType } from 'type-graphql';
 import sequelize from '../sequelize';
-import { Manager } from './Manager';
 import { User } from './User';
 
 @ObjectType()
 @Table
-export class Hitman extends Model<Hitman> {
+export class Hierarchy extends Model<Hierarchy>{
   @Field()
   @Column({
     type: DataType.INTEGER,
@@ -14,28 +13,25 @@ export class Hitman extends Model<Hitman> {
     autoIncrement: true,
   })
   id!: number;
+  
+  @Field()
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  parentId!: number;
 
   @Field()
   @AllowNull(false)
   @ForeignKey(() => User)
   @Column(DataType.NUMBER)
-  userId!: number;
+  childId!: number;
 
-  @Field()
+  @Field() 
   @BelongsTo(() => User)
-  user!: User;
-
-  @Field()
-  @AllowNull(false)
-  @ForeignKey(() => Manager)
-  @Column(DataType.NUMBER)
-  managerId!: number;
-
-  @Field()
-  @BelongsTo(() => Manager)
-  manager!: Manager;
+  User!: User;
+  
 }
 
-sequelize.addModels([Hitman]);
+sequelize.addModels([Hierarchy]);
 
-
+export default Hierarchy;
