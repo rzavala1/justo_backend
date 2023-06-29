@@ -14,6 +14,7 @@ export interface MyContext {
 
 @Resolver()
 export class HitsResolver {
+
   @Query(() => [Hit])
   async hits(@Ctx() context: MyContext): Promise<Hit[]> {
     const { user } = context;
@@ -92,14 +93,4 @@ export class HitsResolver {
     return hit;
   }
 
-  @Mutation(() => Boolean)
-  async deleteHit(@Arg("id") id: number): Promise<boolean> {
-    const hit = await Hit.findByPk(id);
-    if (!hit) {
-      return false;
-    }
-
-    await hit.destroy();
-    return true;
-  }
 }

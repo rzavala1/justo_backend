@@ -35,11 +35,11 @@ export class Hit extends Model<Hit> {
   name!: string;
 
   @Field()
-  @AllowNull(true)
+  @AllowNull(false)
   @Column({
-    type: DataType.ENUM("assigned", "completed", "failed")
+    type: DataType.ENUM("open","assigned", "completed", "failed")
   })
-  status!: string;
+  status?: string;
 
   @Field()
   @CreatedAt

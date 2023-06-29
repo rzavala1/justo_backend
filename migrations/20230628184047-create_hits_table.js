@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('assigned', 'completed', 'failed'),
+        type: Sequelize.ENUM('open','assigned', 'completed', 'failed'),
         allowNull: false,
         defaultValue: 'assigned',
       },
