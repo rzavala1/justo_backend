@@ -14,12 +14,6 @@ export interface MyContext {
 
 @Resolver()
 export class HitsResolver {
-  /*@Query(() => [Hit])
-  async hits(): Promise<Hit[]> {
-    const hits = await Hit.findAll();
-    return hits;
-  }*/
-
   @Query(() => [Hit])
   async hits(@Ctx() context: MyContext): Promise<Hit[]> {
     const { user } = context;
@@ -64,17 +58,23 @@ export class HitsResolver {
     }
   }
 
-  @Query(() => Hit)
-  async hit(@Arg("id") id: number): Promise<Hit | null> {
-    const hit = await Hit.findByPk(id);
-    return hit;
-  }
 
-  /* @Mutation(() => Hit)
+  @Mutation(() => Hit)
   async createHit(@Arg("data") data: CreateHitInput): Promise<Hit> {
     const hit = await Hit.create(data as Hit);
     return hit;
-  }*/
+  }
+
+  @Query(() => Hit)
+  async hit(@Arg("id") id: number): Promise<Hit | null> {
+    const hit = await Hit.findOne({
+      where: { id },
+      include: ['assignUser', 'createUser'],
+    });
+    return hit;
+  }
+
+
 
   @Mutation(() => Hit)
   async updateHit(

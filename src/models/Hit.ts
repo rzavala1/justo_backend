@@ -14,7 +14,7 @@ import sequelize from "../sequelize";
 import { User } from "./User";
 
 @ObjectType()
-@Table({ tableName: 'hits' }) 
+@Table({ tableName: "hits" })
 export class Hit extends Model<Hit> {
   @Field()
   @Column({
@@ -22,7 +22,7 @@ export class Hit extends Model<Hit> {
     primaryKey: true,
     autoIncrement: true,
   })
-  id!: number;
+  id?: number;
 
   @Field()
   @AllowNull(false)
@@ -45,22 +45,12 @@ export class Hit extends Model<Hit> {
   @Field()
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  createdAt?: Date;
 
   @Field()
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
-
-  @Field()
-  @AllowNull(false)
-  @ForeignKey(() => User)
-  @Column(DataType.NUMBER)
-  assignId!: number;
-
-  @Field() 
-  @BelongsTo(() => User)
-  User!: User;
+  updatedAt?: Date;
 
   @Field()
   @AllowNull(false)
@@ -68,6 +58,19 @@ export class Hit extends Model<Hit> {
   @Column(DataType.NUMBER)
   createId!: number;
 
+  @Field()
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  assignId!: number;
+
+  @Field(() => User)
+  @BelongsTo(() => User, { foreignKey: "assignId", as: "assignUser" })
+  assignUser!: User;
+
+  @Field(() => User)
+  @BelongsTo(() => User, { foreignKey: "createId", as: "createUser" })
+  createUser!: User;
 }
 
 sequelize.addModels([Hit]);
