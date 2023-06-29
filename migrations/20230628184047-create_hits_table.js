@@ -9,20 +9,32 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      target: {
+      description: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('assigned', 'completed', 'failed'),
+        type: Sequelize.ENUM('open','assigned', 'completed', 'failed'),
         allowNull: false,
         defaultValue: 'assigned',
       },
-      hitmanId: {
+      createId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'hitman',
+          model: 'users',
+          key: 'id',
+        },
+      },
+      assignId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
           key: 'id',
         },
       },

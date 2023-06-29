@@ -1,10 +1,20 @@
-import { Model, Table, Column, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, AllowNull } from 'sequelize-typescript';
-import { Field, ObjectType } from 'type-graphql';
-import sequelize from '../sequelize';
-import { Hitman } from './Hitman';
+import {
+  Model,
+  Table,
+  Column,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+  ForeignKey,
+  BelongsTo,
+  AllowNull,
+} from "sequelize-typescript";
+import { Field, ObjectType } from "type-graphql";
+import sequelize from "../sequelize";
+import { User } from "./User";
 
 @ObjectType()
-@Table
+@Table({ tableName: "hits" })
 export class Hit extends Model<Hit> {
   @Field()
   @Column({
@@ -12,35 +22,54 @@ export class Hit extends Model<Hit> {
     primaryKey: true,
     autoIncrement: true,
   })
-  id!: number;
+  id?: number;
 
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
-  target!: string;
+  description!: string;
 
+  @Field()
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  name!: string;
 
+  @Field()
   @AllowNull(false)
   @Column({
-    type: DataType.ENUM('assigned', 'completed', 'failed'),
-    defaultValue: 'assigned',
+    type: DataType.ENUM("open","assigned", "completed", "failed")
   })
-  status!: string;
+  status?: string;
 
+  @Field()
   @CreatedAt
   @Column(DataType.DATE)
-  createdAt!: Date;
+  createdAt?: Date;
 
+  @Field()
   @UpdatedAt
   @Column(DataType.DATE)
-  updatedAt!: Date;
+  updatedAt?: Date;
 
+  @Field()
   @AllowNull(false)
-  @ForeignKey(() => Hitman)
+  @ForeignKey(() => User)
   @Column(DataType.NUMBER)
-  hitmanId!: number;
+  createId!: number;
 
-  @BelongsTo(() => Hitman)
-  hitman!: Hitman;
+  @Field()
+  @AllowNull(false)
+  @ForeignKey(() => User)
+  @Column(DataType.NUMBER)
+  assignId!: number;
+
+  @Field(() => User)
+  @BelongsTo(() => User, { foreignKey: "assignId", as: "assignUser" })
+  assignUser!: User;
+
+  @Field(() => User)
+  @BelongsTo(() => User, { foreignKey: "createId", as: "createUser" })
+  createUser!: User;
 }
 
 sequelize.addModels([Hit]);

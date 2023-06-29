@@ -4,7 +4,7 @@ import sequelize from '../sequelize';
 import { Role } from './Role';
 
 @ObjectType()
-@Table
+@Table({ tableName: 'users' }) 
 export class User extends Model<User> {
   @Field()
   @Column({
@@ -14,10 +14,12 @@ export class User extends Model<User> {
   })
   id!: number;
   
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
   name!: string;
 
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
   email!: string;
@@ -34,6 +36,7 @@ export class User extends Model<User> {
   @Column(DataType.DATE)
   updatedAt!: Date;
 
+  @Field()
   @AllowNull(false)
   @ForeignKey(() => Role)
   @Column(DataType.NUMBER)
@@ -41,6 +44,14 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Role)
   role!: Role;
+
+  @Field()
+  @AllowNull(false)
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: true,
+  })
+  active!: boolean;
 
 }
 sequelize.addModels([User]);

@@ -3,7 +3,7 @@ import { Field, ObjectType } from 'type-graphql';
 import sequelize from '../sequelize';
 
 @ObjectType()
-@Table
+@Table({ tableName: 'roles' }) 
 export class Role extends Model<Role>{
   @Field()
   @Column({
