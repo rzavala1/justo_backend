@@ -18,12 +18,11 @@ export class HitsResolver {
   async hits(@Ctx() context: MyContext): Promise<Hit[]> {
     const { user } = context;
     const userSave = await User.findByPk(user?.userId);
-    console.info("este es el rol", userSave!.roleId);
 
     switch (userSave?.roleId) {
       case 1: //boss
         const allHits = await Hit.findAll({
-          include: [User],
+          include: ['assignUser', 'createUser'],
         });
         return allHits;
 
@@ -37,7 +36,7 @@ export class HitsResolver {
         const hitmanIds = hierarchy.map((item) => item.childId);
 
         const hits = await Hit.findAll({
-          include: [User],
+          include: ['assignUser', 'createUser'],
           where: {
             assignId: {
               [Op.in]: hitmanIds,
@@ -48,7 +47,7 @@ export class HitsResolver {
 
       case 3:
         const hitsForHitman = await Hit.findAll({
-          include: [User],
+          include: ['assignUser', 'createUser'],
           where: { assignId: userSave!.id },
         });
         return hitsForHitman;
@@ -73,8 +72,6 @@ export class HitsResolver {
     });
     return hit;
   }
-
-
 
   @Mutation(() => Hit)
   async updateHit(
