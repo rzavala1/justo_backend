@@ -59,9 +59,14 @@ export class HitsResolver {
 
 
   @Mutation(() => Hit)
-  async createHit(@Arg("data") data: CreateHitInput): Promise<Hit> {
-    const hit = await Hit.create(data as Hit);
-    return hit;
+  async createHit(@Arg("data") data: CreateHitInput, @Ctx() context: MyContext): Promise<Hit> {
+    const { user } = context;
+    const userSave = await User.findByPk(user?.userId);
+    if(userSave?.roleId!==3){
+      const hit = await Hit.create(data as Hit);
+      return hit;
+    }
+    throw new Error("Invalid");
   }
 
   @Query(() => Hit)

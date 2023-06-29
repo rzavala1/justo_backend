@@ -37,8 +37,7 @@ export class Hit extends Model<Hit> {
   @Field()
   @AllowNull(true)
   @Column({
-    type: DataType.ENUM("assigned", "completed", "failed"),
-    defaultValue: "assigned",
+    type: DataType.ENUM("assigned", "completed", "failed")
   })
   status!: string;
 
