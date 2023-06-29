@@ -11,16 +11,13 @@ Proporciona la lógica y la API necesaria para gestionar los datos y las funcion
 
 1. Clona el repositorio en tu máquina local:
 
-```shell
 git clone https://github.com/tu-usuario/justo-agencia.git
-```shell
+
 
 2. Accede al directorio del proyecto:
-```shell
 cd backend-agencia
 
 3.Instala las dependencias del proyecto:
-```shell
 npm install
 
 ##Configuración
@@ -29,7 +26,6 @@ Crea un archivo .env en la raíz del proyecto y proporciona los siguientes valor
 Las variables a utilizar se encuetran en el archivo .evn.example
 
 4. Asegúrate de tener una instancia de MySQL en ejecución y actualiza los valores de conexión (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) según corresponda.
-```shell
 npm run dev
 
 5 Accede a la API Graphql en la siguiente URL:
